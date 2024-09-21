@@ -1,0 +1,58 @@
+import customtkinter as ctkapp
+import tkinter as tk
+import datetime
+
+
+class WalletApp(ctkapp.CTk):
+    def __init__(self):
+        super().__init__()
+        self.title("Wallet App")
+        self.geometry("400x300")
+
+        self.wallet_balance = 0
+        self.transaction_history = []
+
+        self.wallet_label = ctkapp.CTkLabel(self, text="Wallet Balance: ₹0")
+        self.wallet_label.pack(pady=10)
+
+        self.add_money_entry = ctkapp.CTkEntry(self, placeholder_text="Enter amount")
+        self.add_money_entry.pack(pady=5)
+
+        self.add_money_button = ctkapp.CTkButton(self, text="Add Money", command=self.add_money)
+        self.add_money_button.pack(pady=5)
+
+        self.book_ride_button = ctkapp.CTkButton(self, text="Book Ride (₹20)", command=self.book_ride)
+        self.book_ride_button.pack(pady=5)
+
+        self.transaction_history_text = ctkapp.CTkTextbox(self, height=10)
+        self.transaction_history_text.pack(pady=10)
+
+    def add_money(self):
+        amount = int(self.add_money_entry.get())
+        self.wallet_balance += amount
+        self.wallet_label.configure(text=f"Wallet Balance: ₹{self.wallet_balance}")
+
+        transaction_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        self.transaction_history.append(f"Added ₹{amount} on {transaction_time}")
+        self.update_transaction_history()
+
+    def book_ride(self):
+        if self.wallet_balance >= 20:
+            self.wallet_balance -= 20
+            self.wallet_label.configure(text=f"Wallet Balance: ₹{self.wallet_balance}")
+
+            transaction_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            self.transaction_history.append(f"Deducted ₹20 for ride on {transaction_time}")
+            self.update_transaction_history()
+        else:
+            ctkapp.CTkMessageBox(title="Insufficient Funds", message="Please add more money to your wallet.")
+
+    def update_transaction_history(self):
+        self.transaction_history_text.delete("1.0", "end")
+        for transaction in self.transaction_history:
+            self.transaction_history_text.insert("end", transaction + "\n")
+
+
+if __name__ == "__main__":
+    app = WalletApp()
+    app.mainloop()
