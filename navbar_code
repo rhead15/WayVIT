@@ -1,0 +1,111 @@
+import flet
+from flet import *
+from functools import partial
+import time
+
+#sidebar
+class ModernNavBar(UserControl):
+    def __init__(self):
+        super().__init__()
+
+    def UserData(self, initials:str, name:str, description:str):
+        return Container(
+            content=Row(
+                controls=(
+                    Container(
+                        width=42,
+                        height=42,
+                        bgcolor="bluegrey900",
+                        alignment=alignment.center,
+                        border_radius=8,
+                        content=Text(
+                            value=initials,
+                            size=20,
+                            weight="bold",
+                        ),
+                    ),
+                    Column(
+                        spacing=1,
+                        alignment="center",
+                        controls=(
+                            Text(
+                            value=name,
+                            size=11,
+                            weight="bold",
+                            opacity=1,
+                            animate_opacity=200
+                            ),
+                            Text(
+                                value=description,
+                                size=11,
+                                weight="w400",
+                                color="white54",
+                                opacity=1,
+                                animate_opacity=200
+                            ),
+
+                        ),
+                    )
+                ),
+            )
+        )
+
+    #main sidebar rows
+    '''''
+    def ContainerIcon(self, iconname:str, text:str):
+        return Container(
+            width=18, height=45, border_radius=10,
+            on_hover=None,
+            content=Row(
+                controls=(
+                    IconButton(
+                        icon=icon_name,
+                        icon_size=18,
+                        icon_color="white54",
+                        style=ButtonStyle(
+
+                )
+                    ),
+                )
+            ),
+
+        )
+        '''''
+
+    def build(self):
+        return Container(
+            width=200,
+            height=500,
+            padding=padding.only(top=10),
+            alignment=alignment.center,
+            content=Column(
+                controls=(
+                    self.UserData("VIT", "Username", "Registration No"),
+                    Divider(height=5, color="transparent"),
+                )
+            ))
+
+
+#main function
+def main(page:Page):
+    page.title="Flet Modern Sidebar"
+    page.horizontal_alignment="center"
+    page.vertical_alignment="center"
+    page.add(
+        Container(
+            width=200,
+            height=500,
+            bgcolor="black",
+            border_radius=10,
+            animate=animation.Animation(500,"decelerate"),
+            alignment=alignment.center,
+            padding=10,
+            content=ModernNavBar()
+        )
+    )
+
+    page.update()
+
+#run
+if __name__=='__main__':
+    flet.app(target=main)
