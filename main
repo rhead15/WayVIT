@@ -1,0 +1,141 @@
+import customtkinter
+import tkinter as tk
+from PIL import Image, ImageTk
+import datetime
+
+def redirect_to_homepage():
+    """Removes current content and displays homepage content within the frame."""
+
+    # Clear existing widgets in the frame
+    for widget in frame.winfo_children():
+        widget.destroy()
+
+    # Create homepage content (replace with your desired content)
+    homepage_label = tk.Label(frame, text="Welcome to the Homepage", font=("Century Gothic", 16))
+    homepage_label.pack()
+
+    # Add buttons for wallet and travel log
+    wallet_button = customtkinter.CTkButton(master=frame, width=220, text="Wallet", command=redirect_to_wallet, hover_color="green")
+    wallet_button.pack(pady=10)
+    travel_log_button = customtkinter.CTkButton(master=frame, width=220, text="Travel Log", command=redirect_to_travel_log, hover_color="green")
+    travel_log_button.pack(pady=10)
+
+
+def redirect_to_wallet():
+    """Removes current content and displays wallet content within the frame."""
+
+    # Clear existing widgets in the frame
+    for widget in frame.winfo_children():
+        widget.destroy()
+
+    # Create wallet content (replace with your desired content)
+    wallet_label = tk.Label(frame, text="Welcome to your Wallet", font=("Century Gothic", 16))
+    wallet_label.pack()
+
+    class WalletApp(customtkinter.CTk):
+
+        def __init__(self):
+            super().__init__()
+            self.title("Wallet App")
+            self.geometry("400x300")
+
+            self.wallet_balance = 0
+            self.transaction_history = []
+
+            self.wallet_label = customtkinter.CTkLabel(self, text="Wallet Balance: ₹0")
+            self.wallet_label.pack(pady=10)
+
+            self.add_money_entry = customtkinter.CTkEntry(self, placeholder_text="Enter amount")
+            self.add_money_entry.pack(pady=5)
+
+            self.add_money_button = customtkinter.CTkButton(self, text="Add Money", command=self.add_money)
+            self.add_money_button.pack(pady=5)
+
+            self.book_ride_button = customtkinter.CTkButton(self, text="Book Ride (₹20)", command=self.book_ride)
+            self.book_ride_button.pack(pady=5)
+
+            self.transaction_history_text = customtkinter.CTkTextbox(self, height=10)
+            self.transaction_history_text.pack(pady=10)
+
+        def add_money(self):
+            amount = int(self.add_money_entry.get())
+            self.wallet_balance += amount
+            self.wallet_label.configure(text=f"Wallet Balance: ₹{self.wallet_balance}")
+
+            transaction_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            self.transaction_history.append(f"Added ₹{amount} on {transaction_time}")
+            self.update_transaction_history()
+
+        def book_ride(self):
+            if self.wallet_balance >= 20:
+                self.wallet_balance -= 20
+                self.wallet_label.configure(text=f"Wallet Balance: ₹{self.wallet_balance}")
+
+                transaction_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                self.transaction_history.append(f"Deducted ₹20 for ride on {transaction_time}")
+                self.update_transaction_history()
+            else:
+                ctkapp.CTkMessageBox(title="Insufficient Funds", message="Please add more money to your wallet.")
+
+        def update_transaction_history(self):
+            self.transaction_history_text.delete("1.0", "end")
+            for transaction in self.transaction_history:
+                self.transaction_history_text.insert("end", transaction + "\n")
+
+    if __name__ == "__main__":
+        app = WalletApp()
+        app.mainloop()
+
+
+    # Add back button
+    back_button = customtkinter.CTkButton(master=frame, width=220, text="Back", command=redirect_to_homepage, hover_color="green")
+    back_button.pack(pady=10)
+
+
+def redirect_to_travel_log():
+    """Removes current content and displays travel log content within the frame."""
+
+    # Clear existing widgets in the frame
+    for widget in frame.winfo_children():
+        widget.destroy()
+
+    # Create travel log content (replace with your desired content)
+    travel_log_label = tk.Label(frame, text="Welcome to your Travel Log", font=("Century Gothic", 16))
+    travel_log_label.pack()
+
+    # Add back button
+    back_button = customtkinter.CTkButton(master=frame, width=220, text="Back", command=redirect_to_homepage, hover_color="green")  # Corrected typo (hover_color)
+    back_button.pack(pady=10)
+
+# Create the main window
+app = customtkinter.CTk()
+app.geometry("480x800")
+app.title("WayVIT")
+
+'''''
+# Set background image (uncomment if you have the image)
+image = Image.open("logonew.png")
+photo = ImageTk.PhotoImage(image)
+label = tk.Label(app, image=photo)
+label.pack()
+label.place(x=220,y=60)
+'''''
+# Create content frame
+frame = customtkinter.CTkFrame(master=app, width=320, height=360)
+frame.place(relx=0.5, rely=0.5, anchor=tk.CENTER)
+
+# Sign-in labels and entries (optional, remove if not needed)
+l2 = customtkinter.CTkLabel(master=frame, text="Sign-in", font=("Century Gothic", 20))
+l2.place(x=130, y=45)
+entry1 = customtkinter.CTkEntry(master=frame, width=220, placeholder_text="Username")
+entry1.place(x=50, y=110)
+entry2 = customtkinter.CTkEntry(master=frame, width=220, placeholder_text="Password")
+entry2.place(x=50, y=165)
+
+# Login button (without destroying the window)
+button1 = customtkinter.CTkButton(master=frame, width=220, text="Login", corner_radius=6, command=redirect_to_homepage, hover_color="green")
+button1.place(x=50, y=240)
+
+# Main event loop
+app.mainloop()
+
